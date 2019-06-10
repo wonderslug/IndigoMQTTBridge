@@ -506,7 +506,11 @@ class Plugin(indigo.PluginBase):
                         dev.updateStateImageOnServer(indigo.kStateImageSel.TemperatureSensorOn)
                 else:
                     self.debugLog(u"Dissecting Topic")
-                    statelesstopic = self.superBridgePatternIn.replace(u"{DeviceName}", indigo.devices[devID].name)
+                    if msg.topic.find(str(devID)) > 0:
+                        device_name = str(devID)
+                    else:
+                        device_name = indigo.devices[devID].name
+                    statelesstopic = self.superBridgePatternIn.replace(u"{DeviceName}", device_name)
                     beforestate = statelesstopic.split(u"{State}")[0]
                     afterstate = statelesstopic.split(u"{State}")[1]
                     self.debugLog(u"BeforeState: " + beforestate)
